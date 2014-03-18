@@ -86,8 +86,18 @@ body{
     width: 190px;
 }
 
+
+.arrow_document {
+background: url("../images/dropdown.png") no-repeat scroll 0 -7px transparent;
+display: block;
+height: 17px;
+right: 8px;
+top: 7px;
+width: 15px;
+}
+
 .arrow {
-background: url("http://images.pricegrabber.com/images/pglean/dropdown.png") no-repeat scroll 0 -7px transparent;
+background: url("../images/dropdown.png") no-repeat scroll 0 -7px transparent;
 display: block;
 height: 17px;
 position: absolute;
@@ -139,3 +149,12 @@ label.checkbox {
 .authors{
 	color: #1e0fbe;
 }
+
+.hide{
+	display:none;
+}
+
+.show{
+	display:visible;
+}
+
