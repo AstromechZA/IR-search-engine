@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	  
+		<title>IR Interface</title>
+
+		<link href="styles/styles.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="styles/normalize.css">  
+		<link rel="stylesheet" type="text/css" href="styles/result-light.css">   
+		<link rel="stylesheet" type="text/css" href="styles/simplePagination.css">   
+
+		<script type="text/javascript" src="scripts/jquery-1.7.1.js"></script>
+		<script type="text/javascript" src="scripts/jquery.autocomplete.min.js"></script>
+		<script type="text/javascript" src="scripts/currency-autocomplete.js"></script>
+		<script type="text/javascript" src="scripts/jquery.simplePagination.js"></script>
+		<script type="text/javascript" src="scripts/jquery.timeago.js"></script>	  
+		<script type="text/javascript" src="scripts/functions.js"></script>
+
+	</head>
+	<body>
+		<div class="container">
+			<div>
+				<div id="facet_content" style ="position:absolute; top: 30px; padding-left: 120px;"></div>			
+					
+				<div style="float: right; padding-right: 120px;">
+					<div class="col-md-12 column" style="padding-top: 30px; ">
+						<form class="search" id='search_form'>
+							<label for="search-box">Search:</label>
+							<input id="autocomplete" type="text" onfocus="unsetPlaceholder(this)"  onblur="setPlaceholder(this)" placeholder="What can we help you find?"   />
+						</form>
+					</div>												
+				</div>
+				
+				<div id="info_and_search_content" style="float:right; width:622px; border: solid 1px #ccc; border-bottom:none; margin-right: 120px; margin-top: 20px; padding: 10px; ">
+					<script>getAndAppendStats();</script>
+				</div>
+				<div style="float:right; width:622px; border: solid 1px #ccc; border-top: none; margin-right: 120px; padding-left: 10px; padding-right: 10px; text-align: center; "><input type="hidden" id="numberOfDocuments" name="numberOfDocuments" value="0"><div id="pagination" class="pagination light-theme simple-pagination" ></div></div>
+
+			</div>
+				<div id="footer" style="float:right; width:908px; border: solid 1px #ccc; color: white; text-align: center; line-height: 50px; border-bottom:none; margin-left: 120px; margin-top: 20px; padding: 10px; ">
+					<b>Honours IR Assignment 2014: Ben Meier, Jay Benson, Justin Cossutti & Michael Ferguson</b>
+				</div>			
+			<!--<div style="float:right; width:1022px; margin-right: 10px; "><div id="footer">adasd</div></div>-->
+				
+				
+		</div> 
+			
+	</body>
+</html>

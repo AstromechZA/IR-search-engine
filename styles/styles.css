@@ -1,0 +1,141 @@
+/* ----- Supporting Elements ----- */
+
+body{
+    font-family:Helvetica, Arial, sans-serif;
+	padding-bottom:60px;   /* Height of the footer */
+}
+
+#footer {
+   bottom:0;
+   height: 50px;
+	/* Height of the footer */
+   background:#4C4C4C;
+}
+
+/* ----- Search Form ----- */
+.search label{
+    font-size:0.75em;
+    color:#333;
+    text-indent:-9999em;
+    display:block;
+    float:left;
+}
+.search input[type="text"]{
+    text-indent:1px;
+    padding:0 0 0 22px;
+    width:620px;
+    height:41px;
+    background:url(../images/search-icon.png) 600px 8px no-repeat, -webkit-linear-gradient(top, rgba(100,100,100,1) 0%, rgba(40,40,40,1) 2%, rgba(22,22,22,1)100%);
+    background:url(../images/search-icon.png) 600px 8px no-repeat, -moz-linear-gradient(top, rgba(100,100,100,1) 0%, rgba(40,40,40,1) 2%, rgba(22,22,22,1)100%);
+    border:1px solid #333;
+    color:#999;
+    line-height:22px;
+
+    -webkit-box-shadow:1px 1px 0 rgba(255,255,255,0.125);
+    -moz-border-radius:6px;
+    -moz-box-shadow:1px 1px 0 rgba(255,255,255,0.125); 
+    cursor:pointer;
+}
+.search input[type="text"]:focus{
+    width:620px;
+    outline:none;
+    -webkit-box-shadow:1px 1px 0 rgba(255,255,255,0.125);
+    -moz-box-shadow:1px 1px 0 rgba(255,255,255,0.125);
+    cursor:text;
+}
+
+.search_mini input[type="text"]{
+    text-indent:1px;
+    padding:0 0 0 22px;
+    width:165px;
+    height:34px;
+    background:url(../images/search-icon.png) 150px 4px no-repeat, -webkit-linear-gradient(top, rgba(100,100,100,1) 0%, rgba(40,40,40,1) 10%, rgba(22,22,22,1)100%);
+    background:url(../images/search-icon.png) 150px 4px no-repeat, -moz-linear-gradient(top, rgba(100,100,100,1) 0%, rgba(40,40,40,1) 10%, rgba(22,22,22,1)100%);
+    border:1px solid #333;
+    color:#999;
+    line-height:20px;
+    -webkit-border-radius:6px;
+    -webkit-box-shadow:1px 1px 0 rgba(255,255,255,0.125);
+    -moz-border-radius:6px;
+    -moz-box-shadow:1px 1px 0 rgba(255,255,255,0.125); 
+    cursor:pointer;
+}
+.search_mini input[type="text"]:focus{
+    width:165px;
+    outline:none;
+    background:url(../images/search-icon.png) 150px 4px no-repeat, -webkit-linear-gradient(bottom,rgba(100,100,100,1) 0%, rgba(40,40,40,1) 2%, rgba(22,22,22,1)100%);
+    background:url(../images/search-icon.png) 150px 4px no-repeat, -moz-linear-gradient(bottom,rgba(100,100,100,1) 0%, rgba(40,40,40,1) 2%, rgba(22,22,22,1)100%);
+    -webkit-box-shadow:1px 1px 0 rgba(255,255,255,0.125);
+    -moz-box-shadow:1px 1px 0 rgba(255,255,255,0.125);
+    cursor:text;
+}
+
+
+.hide  { display:none; }
+.clickEvent { background-color:#EEE; padding: 7px 10px; }
+
+.facet {
+    display: block;
+    padding: 7px 10px;
+    border: 1px solid #aaa;
+    font-weight: bold;
+    text-shadow: 0 1px 0 #fff;
+    position: relative;
+    text-decoration: none;
+    color: #666;     
+    width: 190px;
+}
+
+.arrow {
+background: url("http://images.pricegrabber.com/images/pglean/dropdown.png") no-repeat scroll 0 -7px transparent;
+display: block;
+height: 17px;
+position: absolute;
+right: 8px;
+top: 7px;
+width: 15px;
+}
+.arrow_change{
+    background-position: 0 -37px;
+}
+
+li {
+display: list-item;
+text-align: -webkit-match-parent;
+}
+
+input[type="checkbox"] {
+    width: 15px;
+    height: 18px;
+    vertical-align: top;
+    margin-right: 5px;
+}
+label.checkbox {
+    vertical-align: top;
+    line-height: 15px;
+    margin: 2px 0;
+    display: block;
+    height: 15px;
+}
+
+.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px; height: 100%;}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}
+
+
+
+.autocomplete-suggestions { border: 1px solid #999; background: #fff; cursor: default; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 23px; font-size: 1.2em; white-space: nowrap; overflow: hidden; }
+.autocomplete-selected { background: #f0f0f0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399ff; }
+
+.link {
+    color: #324FE1;
+    font-weight:bold;
+}
+
+.identifier{
+	color: #009030;
+}
+
+.authors{
+	color: #1e0fbe;
+}
