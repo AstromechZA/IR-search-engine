@@ -41,7 +41,7 @@ $(function(){
         };
         var settings = {
             "size" : {
-                "grid" : 16,
+                "grid" : 8,
                 "factor" : 0,
                 "normalize": true
             },
