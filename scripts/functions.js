@@ -79,8 +79,8 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 						searchResults += '<span class="authors">' + val.author;
 						longSearchResults += '<span class="authors">' + val.author;
 						if (val.date != '' && typeof(val.date) != 'undefined'){
-							searchResults += ' - ' + (val.date+'').substring(0, 4);
-							longSearchResults += ' - ' + (val.date+'').substring(0, 10);
+							searchResults += ' - ' + (val.date+'').substring(0, 4) + '<span style="padding-left:40px;">' + val.detectedlanguage +'</span>';
+							longSearchResults += ' - ' + (val.date+'').substring(0, 10) + '<span style="padding-left:40px;">' + val.detectedlanguage +'</span>';
 						}
 						
 						searchResults += '</span><br />'; 
@@ -307,7 +307,7 @@ $(document).ready(function(){
 			
 			getAndAppendSearchResults(inputQuery, 0, false);
 
-			$.get("http://people.cs.uct.ac.za/~bmeier/solr.php?q="+inputQuery+"&facet=true&facet.limit=5&facet.field=language&facet.field=subject",function(data,status){
+			$.get("http://people.cs.uct.ac.za/~bmeier/solr.php?q="+inputQuery+"&facet=true&facet.limit=5&facet.field=detectedlanguage&facet.field=subject",function(data,status){
 	
 				var numPages = Math.min(Math.ceil(data.response.numFound / 10.0), 100)-1;
 				
@@ -339,9 +339,9 @@ $(document).ready(function(){
 					var languageFacets = '';
 					var subjectFacets = '';
 					
-					var languageLength = Math.min(data.facet_counts.facet_fields.language.length, 10);
+					var languageLength = Math.min(data.facet_counts.facet_fields.detectedlanguage.length, 10);
 					for (var t=0; t< languageLength; t+=2){
-							languageFacets += "<li class='list-group-item'><label class='plain'><input type='checkbox' onClick='applyFilters()' value='language:"+data.facet_counts.facet_fields.language[t]+"'> "+data.facet_counts.facet_fields.language[t]+ '</label><span class="badge">'+data.facet_counts.facet_fields.language[t+1]+'</span></li>';
+							languageFacets += "<li class='list-group-item'><label class='plain'><input type='checkbox' onClick='applyFilters()' value='detectedlanguage:"+data.facet_counts.facet_fields.detectedlanguage[t]+"'> "+data.facet_counts.facet_fields.detectedlanguage[t]+ '</label><span class="badge">'+data.facet_counts.facet_fields.detectedlanguage[t+1]+'</span></li>';
 					}	
 					
 					var subjectLength = Math.min(data.facet_counts.facet_fields.subject.length, 10);
