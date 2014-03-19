@@ -8,7 +8,7 @@ function getSelectedFacets()
 	var selectedFacets=new Array();
 	var count = 0;
 	
-	$('.clickEvent.hide input:checkbox').each(function () {
+	$('.list-group-item input:checkbox').each(function () {
 		if (this.checked){
 			selectedFacets[count] = $(this).val();
 			count++;
@@ -39,11 +39,11 @@ function toggleInfo(docNumber){
 
 // Start Position refers to the position at which the documents to be queried should start from
 function getAndAppendSearchResults(query, startPosition, faceted){
-	
 	//replace spaces with %20
 	query = query.replace(/ /g,"%20");
 	
 	if (query != ''){
+		$('#search-title').show();
 		// Get search data
 		$.get("http://people.cs.uct.ac.za/~bmeier/solr.php?q="+query+"&start="+startPosition,function(data,status){
 			var searchResults = '<div>';
@@ -108,7 +108,7 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 				// If the user has faceted the query, re-paginate and getAndAppendSearchResults
 				if (faceted){
 		
-					$('#documentStatus').html("currently showing 1-"+ Math.min(10, data.response.numFound) + " of " + data.response.numFound + " documents");
+					$('#documentStatus').html("<h5>Displaying 1-"+ Math.min(10, data.response.numFound) + " of " + data.response.numFound + " documents.</h5>");
 					var numDocuments = Math.min(Math.ceil(data.response.numFound / 10.0), 100)-1;
 					
 					$("#pagination").pagination('destroy');
@@ -121,11 +121,11 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 							onPageClick: function(pageNumber, event){	
 								var pageStart = parseInt(pageNumber*10)+parseInt(1);						
 								if (pageNumber > numDocuments){
-									$('#documentStatus').html("currently showing " + pageStart + "-" + numDocuments + " of " + data.response.numFound + " documents");
+									$('#documentStatus').html("<h5>Displaying " + pageStart + "-" + numDocuments + " of " + data.response.numFound + " documents.</h5>");
 								}
 								else{
 									var pageTo = parseInt(pageNumber*10)+parseInt(10);
-									$('#documentStatus').html("currently showing " + pageStart + "-" + Math.min(pageTo, data.response.numFound) + " of " + data.response.numFound + " documents");
+									$('#documentStatus').html("<h5>Displaying " + pageStart + "-" + Math.min(pageTo, data.response.numFound) + " of " + data.response.numFound + " documents.</h5>");
 								}
 								getAndAppendSearchResults(query, pageNumber*10, false);		
 							}
@@ -137,10 +137,6 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 			
 		});
 	}
-	
-	$('#footer').css('position', "relative");
-	$('#footer').css('margin-right', "120px");
-
 }
 
 // Get the current statistics of the journal archive
@@ -157,11 +153,37 @@ function getAndAppendStats(){
 	});		
 }
 
+function applyFilters() {
+	var filters = {};
+	
+	$.each(getSelectedFacets(), function( index, value ) {
+		var filter = value.indexOf(':');
+		var key = value.slice(0, filter);
+		var val = value.slice(filter+1);
+		
+		if(filters[key] == null)
+			filters[key] = [];
+			
+		filters[key].push(val);					
+	});
+	
+	var facetString = '';
+	$.each(filters, function(index, value){
+		facetString += '&fq=' + index + ':(';
+		for(var i=0; i < value.length; i++){
+			if(i != 0)
+				facetString += ' ';
+			facetString += value[i];
+		}
+		facetString += ')';
+	});
+	
+	var queryString = $('#autocomplete').val()+facetString;
+	getAndAppendSearchResults(queryString, 0, true);
+}
+
 
 $(document).ready(function(){
-
-	$('#footer').css('position', "fixed");
-	$('#footer').css('margin-left', "120px");
 
 	$("#autocomplete").keyup(function(){
 		//Get value of the entire input field
@@ -171,9 +193,7 @@ $(document).ready(function(){
 			$("#facet_content").empty();
 			$("#pagination").pagination('destroy');
 			$('#documentStatus').html("");
-			$('#footer').css('position', "fixed");
-			$('#footer').css('margin-left', "120px");
-			
+			$('#search-title').hide();
 			getAndAppendStats();
 		}		
 	});
@@ -235,7 +255,7 @@ $(document).ready(function(){
 				
 				if(data.response.docs.length > 0){
 				
-					$('#documentStatus').html("currently showing 1-"+ Math.min(10, data.response.numFound) + " of " + data.response.numFound + " documents");
+					$('#documentStatus').html("<h5>Displaying 1-"+ Math.min(10, data.response.numFound) + " of " + data.response.numFound + " documents.</h5>");
 				
 					// Pagination
 					$(function() {
@@ -246,10 +266,10 @@ $(document).ready(function(){
 								var pageTo = parseInt(pageNumber*10)+parseInt(10);
 								if (pageNumber < numPages){
 									var pageStart = parseInt(pageNumber*10)+parseInt(1);
-									$('#documentStatus').html("currently showing " + pageStart + "-" + Math.min(pageTo, data.response.numFound) + " of " + data.response.numFound + " documents");
+									$('#documentStatus').html("<h5>Displaying " + pageStart + "-" + Math.min(pageTo, data.response.numFound) + " of " + data.response.numFound + " documents.</h5>");
 								}
 								else{
-									$('#documentStatus').html("currently showing " + pageStart + "-" + data.response.numFound + " of " + data.response.numFound + " documents");
+									$('#documentStatus').html("<h5>Displaying " + pageStart + "-" + data.response.numFound + " of " + data.response.numFound + " documents.</h5>");
 								}
 								getAndAppendSearchResults(inputQuery, pageNumber*10, false);		
 							}
@@ -264,72 +284,36 @@ $(document).ready(function(){
 					
 					var languageLength = Math.min(data.facet_counts.facet_fields.language.length, 10);
 					for (var t=0; t< languageLength; t+=2){
-							languageFacets += "<li><label><input type='checkbox' value='language:"+data.facet_counts.facet_fields.language[t]+"'>"+data.facet_counts.facet_fields.language[t]+ ' ('+data.facet_counts.facet_fields.language[t+1]+')</label><br></li>';
+							languageFacets += "<li class='list-group-item'><label class='plain'><input type='checkbox' onClick='applyFilters()' value='language:"+data.facet_counts.facet_fields.language[t]+"'> "+data.facet_counts.facet_fields.language[t]+ '</label><span class="badge">'+data.facet_counts.facet_fields.language[t+1]+'</span></li>';
 					}	
 					
 					var dateLength = Math.min(data.facet_counts.facet_fields.date.length, 10);
 					for (var t=0; t< dateLength; t+=2){
-							dateFacets += "<li><label><input type='checkbox' value='date:"+data.facet_counts.facet_fields.date[t]+"'>"+(data.facet_counts.facet_fields.date[t]+'').substring(0, 4)+ ' ('+data.facet_counts.facet_fields.date[t+1]+')</label><br></li>';				
+							dateFacets += "<li class='list-group-item'><label class='plain'><input type='checkbox' onClick='applyFilters()' value='date:"+data.facet_counts.facet_fields.date[t]+"'> "+(data.facet_counts.facet_fields.date[t]+'').substring(0, 4)+ '</label><span class="badge">'+data.facet_counts.facet_fields.date[t+1]+'</span></li>';				
 					}
 					
 					var subjectLength = Math.min(data.facet_counts.facet_fields.subject.length, 10);
 					for (var t=0; t< subjectLength; t+=2){
-						subjectFacets += "<li><label><input type='checkbox' value='subject:"+data.facet_counts.facet_fields.subject[t]+"'>"+data.facet_counts.facet_fields.subject[t]+ ' ('+data.facet_counts.facet_fields.subject[t+1]+')</label><br></li>';
+						subjectFacets += "<li class='list-group-item'><label class='plain'><input type='checkbox' onClick='applyFilters()' value='subject:"+data.facet_counts.facet_fields.subject[t]+"'> "+data.facet_counts.facet_fields.subject[t]+ '</label><span class="badge">'+data.facet_counts.facet_fields.subject[t+1]+'</span></li>';
 					}
 					
 					// FACET SIDEBAR
 					//------------------------------------------------------------------------------------------------------------------------------
 					$('#facet_content').html(
 					
-					"<div class='facet' style='border: 1px solid #aaa; width: 190px; text-align: center; color: #3399ff;'>Refine Search</div>"+
-					"<div>"+
-						"<a href='javascript:;' class='clickMe facet'>Language <span class='arrow arrow_change'></span></a>" +
-						"<div class='clickEvent hide' style='border-right: 1px solid #aaa; border-left: 1px solid #aaa; width: 190px;'>" +
-						" <ul>"+ languageFacets + "</ul>"+					
-						"</div>"+   
-					"</div>"+
-					"<div>"+
-						"<a href='javascript:;' class='clickMe facet'>Date <span class='arrow arrow_change'></span></a>" +
-						"<div class='clickEvent hide' style='border-right: 1px solid #aaa; border-left: 1px solid #aaa; width: 190px;'>" +
-						" <ul>"+ dateFacets + "</ul>"+					
-						"</div>"+   
-					"</div>"+
-					"<div>"+
-						"<a href='javascript:;' class='clickMe facet'>Subject <span class='arrow arrow_change'></span></a>"+
-						"<div id='TEST' class='clickEvent hide' style='border: 1px solid #aaa; width: 190px;'>"+
-							"<ul>"+ subjectFacets + "</ul>"+
-						"</div>"+
-					"</div>	");
-				
-					$('.clickEvent.hide input:checkbox').click(function(){	
-						var filters = {};
-						
-						$.each(getSelectedFacets(), function( index, value ) {
-							var filter = value.split(':');
-							var key = filter[0];
-							var val = filter[1];
-							
-							if(filters[key] == null)
-								filters[key] = [];
-								
-							filters[key].push(val);					
-						});
-						
-						var facetString = '';
-						$.each(filters, function(index, value){
-							facetString += '&fq=' + index + ':(';
-							for(var i=0; i < value.length; i++){
-								if(i != 0)
-									facetString += ' ';
-								facetString += value[i];
-							}
-							facetString += ')';
-						});
-						
-						var queryString = $('#autocomplete').val()+facetString;
-						//alert(queryString);
-						getAndAppendSearchResults(queryString, 0, true);
-					});
+					"<div class='page-header'><h3>Refine search</h3></div>"+
+					"<ul class='list-group'>"+
+						"<li class='list-group-item' style='background-color: #dd4814; border-color: #dd4814; color: #fff;'>Language</li>" +
+						languageFacets +   
+					"</ul>"+
+					"<ul class='list-group'>"+
+						"<li class='list-group-item' style='background-color: #dd4814; border-color: #dd4814; color: #fff;'>Date</li>" +
+						dateFacets +  
+					"</ul>"+
+					"<ul class='list-group'>"+
+						"<li class='list-group-item' style='background-color: #dd4814; border-color: #dd4814; color: #fff;'>Subject</li>" +
+						subjectFacets +  
+					"</ul>");
 
 					$('.clickMe').toggle(function() {
 						$(this).parent().find("div:eq(0)").slideDown("fast");
@@ -343,8 +327,6 @@ $(document).ready(function(){
 			});
 		}
 		//------------------------------------------------------------------------------------------------------------------------------
-		$('#footer').css('position', "relative");
-		$('#footer').css('margin-right', "120px");
 		return false;
 	});
 		
