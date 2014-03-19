@@ -140,7 +140,7 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 					arrowthing = '<div style="float:right;"><a href="javascript:;" class="dropdown"><div class="arrow_document arrow_change" onClick="toggleInfo(' + documentNumber + ')"></div></a></div>';
 
 					shortFormResult = '<div style="float:left; width="95%">' + shortFormResult + '</div>'
-					longFormResult = '<div style="float:left; width="95%"">' + longFormResult + '</div>'
+					longFormResult = '<div style="float:left; width="95%">' + longFormResult + '</div>'
 
 					searchResults += '<div class="result-block">' + arrowthing + shortFormResult + longFormResult + '<div class="clearfix"></div></div>';
 
