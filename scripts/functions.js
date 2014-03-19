@@ -120,8 +120,8 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 						shortFormResult += '<span class="authors">' + val.author;
 						longFormResult += '<span class="authors">' + val.author;
 						if (val.date != '' && typeof(val.date) != 'undefined'){
-							shortFormResult += ' - ' + (val.date+'').substring(0, 4) + '<span style="padding-left:40px;">' + val.detectedlanguage +'</span>';
-							longFormResult += ' - ' + (val.date+'').substring(0, 10) + '<span style="padding-left:40px;">' + val.detectedlanguage +'</span>';
+							shortFormResult += ' - ' + (val.date+'').substring(0, 4) + ' - ' + translateShortLangToLong(val.detectedlanguage) +'';
+							longFormResult += ' - ' + (val.date+'').substring(0, 10) + ' - ' + translateShortLangToLong(val.detectedlanguage) +'';
 						}
 						
 						shortFormResult += '</span><br />'; 
@@ -134,7 +134,7 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 					}
 
 					
-					shortFormResult += '<span class="identifier">' + (val.identifier+'').trunc(50) + '</span></div>';
+					shortFormResult += '<span class="identifier">' + (val.identifier+'').trunc(100) + '</span></div>';
 					longFormResult += '<span class="identifier">' + val.identifier + '</span></div>';
 					arrowthing = '<div style="width:30px; height: 20px; padding-top: 2px; float:right;"><a href="javascript:;" class="dropdown"><div class="arrow_document arrow_change" onClick="toggleInfo(' + documentNumber + ')"></div></a></div>';
 
