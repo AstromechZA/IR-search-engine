@@ -1,0 +1,36 @@
+.table-curved {
+    border-collapse: separate;
+}
+.table-curved {
+    border: solid #dd4814 1px;
+    border-radius: 6px;
+    border-left:0px;
+}
+.table-curved td, .table-curved th {
+    border-left: 1px solid #dd4814;
+    border-top: 1px solid #dd4814;
+}
+.table-curved th {
+    border-top: none;
+}
+.table-curved th:first-child {
+    background-color: #dd4814;
+    color: #fff;
+    border-radius: 6px 0 0 0;
+}
+.table-curved th:last-child {
+    border-radius: 0 6px 0 0;
+}
+.table-curved th:only-child{
+    border-radius: 6px 6px 0 0;
+}
+.table-curved tr:last-child td:first-child {
+    border-radius: 0 0 0 6px;
+}
+.table-curved tr:last-child td:last-child {
+    border-radius: 0 0 6px 0;
+}
+
+.table > thead > tr > th {
+    border-bottom: 0px;
+}
