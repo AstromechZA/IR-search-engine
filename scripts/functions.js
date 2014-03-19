@@ -140,7 +140,7 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 
 					var flowleftwrap = '<div style="float:left">' + shortFormResult + longFormResult + '</div>';
 
-					searchResults += '<div>' + flowleftwrap + arrowthing + '<div class="clearfix"></div></div>';
+					searchResults += '<div class="result-block">' + flowleftwrap + arrowthing + '<div class="clearfix"></div></div>';
 
 
 				});
