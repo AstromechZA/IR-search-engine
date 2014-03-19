@@ -341,12 +341,16 @@ $(document).ready(function(){
 					
 					var languageLength = Math.min(data.facet_counts.facet_fields.detectedlanguage.length, 10);
 					for (var t=0; t< languageLength; t+=2){
+						if (data.facet_counts.facet_fields.detectedlanguage[t+1] > 0) {
 							languageFacets += "<li class='list-group-item'><label class='plain'><input type='checkbox' onClick='applyFilters()' value='detectedlanguage:"+data.facet_counts.facet_fields.detectedlanguage[t]+"'> "+data.facet_counts.facet_fields.detectedlanguage[t]+ '</label><span class="badge">'+data.facet_counts.facet_fields.detectedlanguage[t+1]+'</span></li>';
+						}
 					}	
 					
 					var subjectLength = Math.min(data.facet_counts.facet_fields.subject.length, 10);
 					for (var t=0; t< subjectLength; t+=2){
-						subjectFacets += "<li class='list-group-item'><label class='plain'><input type='checkbox' onClick='applyFilters()' value='subject:"+data.facet_counts.facet_fields.subject[t]+"'> "+data.facet_counts.facet_fields.subject[t]+ '</label><span class="badge">'+data.facet_counts.facet_fields.subject[t+1]+'</span></li>';
+						if (data.facet_counts.facet_fields.subject[t+1] > 0) {
+							subjectFacets += "<li class='list-group-item'><label class='plain'><input type='checkbox' onClick='applyFilters()' value='subject:"+data.facet_counts.facet_fields.subject[t]+"'> "+data.facet_counts.facet_fields.subject[t]+ '</label><span class="badge">'+data.facet_counts.facet_fields.subject[t+1]+'</span></li>';
+						}
 					}
 					
 					// FACET SIDEBAR
