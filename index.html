@@ -24,28 +24,35 @@
 <body>
 	<div class="navbar navbar-default navbar-static-top">
 		<div class="container">
-			<div class="navbar-header">
-				<a href="index.html" class="navbar-brand">Archivist</a>
-				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-			</div>
-			<div class="navbar-header">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="stats.html">Stats</a></li>
-                </ul>
-            </div>
-			<div class="navbar-collapse collapse" id="navbar-main">
-				<div class="row">
-					<div class="col-lg-9" style="float:right;">
-						<form class="navbar-form search" id='search_form' >
-							<input id="autocomplete" type="text" onfocus="unsetPlaceholder(this)"  onblur="setPlaceholder(this)" placeholder="What can we help you find?"   />
-						</form>	
-					</div>
-				</div>
-			</div>
+
+            <div class="row">
+	            <div class="col-lg-3">
+					<div class="navbar-header">
+		                <a href="index.html" class="navbar-brand">Archivist</a>
+		                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+		                    <span class="icon-bar"></span>
+		                    <span class="icon-bar"></span>
+		                    <span class="icon-bar"></span>
+		                </button>
+		            </div>
+		            <div class="navbar-collapse collapse" id="navbar-main">
+		                <ul class="nav navbar-nav">
+		                    <li><a href="stats.html">Stats</a></li>
+		                </ul>
+		            </div>
+	            </div>
+                <div class="col-lg-9">
+	                <form class="navbar-form navbar-right" role="search" style="width:100%; margin-right:0px;">
+				        <div class="form-group" id='search_form' style="width:100%">
+							<div class="input-group">
+				          		<input id="autocomplete" class="form-control" type="text" onfocus="unsetPlaceholder(this)"  onblur="setPlaceholder(this)" placeholder="What can we help you find?"   />
+	  							<span class="input-group-addon glyphicon glyphicon-search"></span>
+				        	</div>
+				        </div>
+			      	</form>
+		      	</div>
+	      	</div>
+			
 		</div>	
 	</div>	
 	<div class="container">
