@@ -159,3 +159,7 @@ input[type='checkbox'] {
 #search-title {
     display: none;
 }
+
+.date-input{
+width: 30px;
+}

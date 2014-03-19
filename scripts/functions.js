@@ -146,7 +146,7 @@ function getAndAppendStats(){
 
 		$('#info_and_search_content').html(
 			"<div  style='line-height: 22px; text-align: center;'>" +
-				"<b>Last Modified: </b>"+jQuery.timeago((data.status.ndltdcore.index.lastModified).split('T')[0])+"<br />" +
+				"<b>Last Modified: </b>"+jQuery.timeago(data.status.ndltdcore.index.lastModified)+"<br />" +
 				"<b>Number of Articles:</b> " + data.status.ndltdcore.index.numDocs +
 			"</div>"
 		);
@@ -180,6 +180,36 @@ function applyFilters() {
 	
 	var queryString = $('#autocomplete').val()+facetString;
 	getAndAppendSearchResults(queryString, 0, true);
+}
+
+
+
+function getCurrentFilters(){
+	var filters = {};
+	
+	$.each(getSelectedFacets(), function( index, value ) {
+		var filter = value.indexOf(':');
+		var key = value.slice(0, filter);
+		var val = value.slice(filter+1);
+		
+		if(filters[key] == null)
+			filters[key] = [];
+			
+		filters[key].push(val);					
+	});
+	
+	var facetString = '';
+	$.each(filters, function(index, value){
+		facetString += '&fq=' + index + ':(';
+		for(var i=0; i < value.length; i++){
+			if(i != 0)
+				facetString += ' ';
+			facetString += value[i];
+		}
+		facetString += ')';
+	});
+	
+	return $('#autocomplete').val()+facetString; 
 }
 
 
@@ -249,7 +279,7 @@ $(document).ready(function(){
 			
 			getAndAppendSearchResults(inputQuery, 0, false);
 
-			$.get("http://people.cs.uct.ac.za/~bmeier/solr.php?q="+inputQuery+"&facet=true&facet.limit=5&facet.field=language&facet.field=subject&facet.field=date",function(data,status){
+			$.get("http://people.cs.uct.ac.za/~bmeier/solr.php?q="+inputQuery+"&facet=true&facet.limit=5&facet.field=language&facet.field=subject",function(data,status){
 	
 				var numPages = Math.min(Math.ceil(data.response.numFound / 10.0), 100)-1;
 				
@@ -280,17 +310,17 @@ $(document).ready(function(){
 					// Get Language, publisher, date Facet categories
 					var languageFacets = '';
 					var subjectFacets = '';
-					var dateFacets = '';
+					//var dateFacets = '';
 					
 					var languageLength = Math.min(data.facet_counts.facet_fields.language.length, 10);
 					for (var t=0; t< languageLength; t+=2){
 							languageFacets += "<li class='list-group-item'><label class='plain'><input type='checkbox' onClick='applyFilters()' value='language:"+data.facet_counts.facet_fields.language[t]+"'> "+data.facet_counts.facet_fields.language[t]+ '</label><span class="badge">'+data.facet_counts.facet_fields.language[t+1]+'</span></li>';
 					}	
 					
-					var dateLength = Math.min(data.facet_counts.facet_fields.date.length, 10);
-					for (var t=0; t< dateLength; t+=2){
-							dateFacets += "<li class='list-group-item'><label class='plain'><input type='checkbox' onClick='applyFilters()' value='date:"+data.facet_counts.facet_fields.date[t]+"'> "+(data.facet_counts.facet_fields.date[t]+'').substring(0, 4)+ '</label><span class="badge">'+data.facet_counts.facet_fields.date[t+1]+'</span></li>';				
-					}
+					//var dateLength = Math.min(data.facet_counts.facet_fields.date.length, 10);
+					//for (var t=0; t< dateLength; t+=2){
+					//		dateFacets += "<li class='list-group-item'><label class='plain'><input type='checkbox' onClick='applyFilters()' value='date:"+data.facet_counts.facet_fields.date[t]+"'> "+(data.facet_counts.facet_fields.date[t]+'').substring(0, 4)+ '</label><span class="badge">'+data.facet_counts.facet_fields.date[t+1]+'</span></li>';				
+					//}
 					
 					var subjectLength = Math.min(data.facet_counts.facet_fields.subject.length, 10);
 					for (var t=0; t< subjectLength; t+=2){
@@ -308,7 +338,7 @@ $(document).ready(function(){
 					"</ul>"+
 					"<ul class='list-group'>"+
 						"<li class='list-group-item' style='background-color: #dd4814; border-color: #dd4814; color: #fff;'>Date</li>" +
-						dateFacets +  
+						"<li class='list-group-item-date-range'><form class='form-inline'><input id='startDate' class='form-control input-sm date-input' type='text' maxlength='4' size='5' placeholder='Year' style='width: 50px;'> to <input id='endDate' class='form-control input-sm date-input' type='text' maxlength='4' size='5' placeholder='Year' style='width: 50px;'><a id='dateRangeSubmit' class='btn btn-primary btn-sm' style='float:right;'>Update</a></form><div id='rangeStatus'></div></li>" +
 					"</ul>"+
 					"<ul class='list-group'>"+
 						"<li class='list-group-item' style='background-color: #dd4814; border-color: #dd4814; color: #fff;'>Subject</li>" +
@@ -322,6 +352,29 @@ $(document).ready(function(){
 							$(this).parent().find("div:eq(0)").slideUp("fast");
 							$(this).children().addClass('arrow_change');
 					});
+					
+					$("#dateRangeSubmit").click(function(){  
+
+						//Ensure that startDate is in the correct format
+						var filter = new RegExp("([1-2][0-9][0-9][0-9])");
+
+						var startDateVal = $("#startDate").val();
+						var endDateVal = $("#endDate").val();
+
+						if(filter.test(startDateVal) && filter.test(endDateVal)){							
+							$("#rangeStatus").html('');
+							// Use start and end Year to do a range query
+							//
+							var dateRangeQuery = '&fq=date:['+startDateVal+'-07-01T00:00:00Z'+' TO '+endDateVal+'-07-01T00:00:00Z'+']';
+							//alert(getCurrentFilters()+dateRangeQuery);
+							getAndAppendSearchResults(getCurrentFilters()+dateRangeQuery, 0, true);
+						}
+						else{
+							$("#rangeStatus").html('Invalid Date Range!');
+							
+						}
+
+					});
 				}
 			
 			});
@@ -329,10 +382,17 @@ $(document).ready(function(){
 		//------------------------------------------------------------------------------------------------------------------------------
 		return false;
 	});
+	
+	
+	
+	
+	
 		
 		
 
 });
+
+
 
 
 // Placeholder functions
@@ -347,6 +407,3 @@ function setPlaceholder(textarea){
 
 
 
-$("button").click(function(){
-  $("p").toggle();
-});
