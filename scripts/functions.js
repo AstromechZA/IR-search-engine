@@ -150,20 +150,6 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 	}
 }
 
-// Get the current statistics of the journal archive
-function getAndAppendStats(){
-
-	$.get("http://people.cs.uct.ac.za/~bmeier/solr_stat.php",function(data,status){
-
-		$('#info_and_search_content').html(
-			"<div  style='line-height: 22px; text-align: center;'>" +
-				"<b>Last Modified: </b>"+jQuery.timeago(data.status.ndltdcore.index.lastModified)+"<br />" +
-				"<b>Number of Articles:</b> " + data.status.ndltdcore.index.numDocs +
-			"</div>"
-		);
-	});		
-}
-
 function applyFilters() {
 	var filters = {};
 	
@@ -252,7 +238,6 @@ $(document).ready(function(){
 			$("#pagination").pagination('destroy');
 			$('#documentStatus').html("");
 			$('#search-title').hide();
-			getAndAppendStats();
 		}		
 	});
 	
@@ -301,7 +286,7 @@ $(document).ready(function(){
 		event.preventDefault();
 		
 		//get value of the entire input field
-		var inputQuery = this['autocomplete'].value;
+		var inputQuery = $('#autocomplete')[0].value;
 		
 		if (inputQuery != ''){
 			
