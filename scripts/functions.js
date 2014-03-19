@@ -424,7 +424,7 @@ $(document).ready(function(){
 						if(filter.test(startDateVal) && filter.test(endDateVal)){							
 							$("#rangeStatus").html('');
 							// Use start and end Year to do a range query
-							var dateRangeQuery = '&fq=date:['+startDateVal+'-07-01T00:00:00Z'+' TO '+endDateVal+'-07-01T00:00:00Z'+']';
+							var dateRangeQuery = '&fq=date:['+startDateVal+'-01-01T00:00:00Z'+' TO '+endDateVal+'-07-01T00:00:00Z'+']';
 							getAndAppendSearchResults(getCurrentFilters()+dateRangeQuery, 0, true);
 						}
 						else{
