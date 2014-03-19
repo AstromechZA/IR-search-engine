@@ -80,7 +80,7 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 		$('#search-title').show();
 		// Get search data
 		$.get("http://people.cs.uct.ac.za/~bmeier/solr.php?q="+query+"&start="+startPosition,function(data,status){
-			var searchResults = '<div>';
+			var searchResults = '';
 			// Loop through each doc
 			var documents = data.response.docs;
 			
@@ -91,10 +91,17 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 			var longSearchResults = '';
 			var resultsFound = true;
 			
+			var shortFormResult = '';
+			var longFormResult = '';
+			var arrowthing = '';
+
 			if(documents.length > 0){
 				jQuery.each( documents, function( i, val ) {
 					documentNumber++;
 					
+					shortFormResult = '';
+					longFormResult = '';
+
 					// Highlight Description or Normal Description
 					//--------------------------------------------
 					var documentId = val.id;
@@ -107,37 +114,44 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 					}
 					//--------------------------------------------
 					
-					searchResults += '<div id="documentDetails:' + documentNumber + '" class="show" style="padding-bottom:10px;"><a class="link" href="' + val.identifier + '">' + (val.title+'').trunc(67) + '</a><br />'; 
-					longSearchResults += '<div class="hide" id="documentDetailsLong:' + documentNumber + '" style=" padding-bottom:10px;"><a class="link" href="' + val.identifier + '">' + val.title + '</a><br />'; 					
+					shortFormResult = '<div id="documentDetails:' + documentNumber + '" class="show" style="padding-bottom:10px;"><a class="link" href="' + val.identifier + '">' + (val.title+'').trunc(67) + '</a><br />'; 
+					longFormResult = '<div class="hide" id="documentDetailsLong:' + documentNumber + '" style=" padding-bottom:10px;"><a class="link" href="' + val.identifier + '">' + val.title + '</a><br />'; 					
 					if (val.author != '' && typeof(val.author) != 'undefined'){
-						searchResults += '<span class="authors">' + val.author;
-						longSearchResults += '<span class="authors">' + val.author;
+						shortFormResult += '<span class="authors">' + val.author;
+						longFormResult += '<span class="authors">' + val.author;
 						if (val.date != '' && typeof(val.date) != 'undefined'){
-							searchResults += ' - ' + (val.date+'').substring(0, 4) + '<span style="padding-left:40px;">' + val.detectedlanguage +'</span>';
-							longSearchResults += ' - ' + (val.date+'').substring(0, 10) + '<span style="padding-left:40px;">' + val.detectedlanguage +'</span>';
+							shortFormResult += ' - ' + (val.date+'').substring(0, 4) + '<span style="padding-left:40px;">' + val.detectedlanguage +'</span>';
+							longFormResult += ' - ' + (val.date+'').substring(0, 10) + '<span style="padding-left:40px;">' + val.detectedlanguage +'</span>';
 						}
 						
-						searchResults += '</span><br />'; 
-						longSearchResults += '</span><br />'; 
+						shortFormResult += '</span><br />'; 
+						longFormResult += '</span><br />'; 
 					}
 					
 					if (highlightedDescription != '' && typeof(highlightedDescription) != 'undefined'){
-						searchResults += (highlightedDescription+'').trunc(250) + '<br />';
-						longSearchResults += highlightedDescription + '<br />';
+						shortFormResult += (highlightedDescription+'').trunc(250) + '<br />';
+						longFormResult += highlightedDescription + '<br />';
 					}
 
 					
-					searchResults += '<span class="identifier">' + (val.identifier+'').trunc(50) + '</span></div>';
-					longSearchResults += '<span class="identifier">' + val.identifier + '</span></div>';
-					searchResults += longSearchResults + '<div style="width:30px; height: 20px; padding-top: 2px; float:right;"><a href="javascript:;" class="dropdown"><div class="arrow_document arrow_change" onClick="toggleInfo(' + documentNumber + ')"></div></a></div>';
-					longSearchResults = '';
+					shortFormResult += '<span class="identifier">' + (val.identifier+'').trunc(50) + '</span></div>';
+					longFormResult += '<span class="identifier">' + val.identifier + '</span></div>';
+					arrowthing = '<div style="width:30px; height: 20px; padding-top: 2px; float:right;"><a href="javascript:;" class="dropdown"><div class="arrow_document arrow_change" onClick="toggleInfo(' + documentNumber + ')"></div></a></div>';
+
+					var flowleftwrap = '<div style="float:left">' + shortFormResult + longFormResult + '</div>';
+
+					searchResults += '<div>' + flowleftwrap + arrowthing + '<div class="clearfix"></div></div>';
+
+
 				});
 			}else{
 				resultsFound = false;
 				searchResults += '<p>No results found.</p>';
 				$("#pagination").pagination('destroy');
 			}
-			searchResults += '</div>';
+
+			// wrap in div
+			searchResults = '<div>' + searchResults + '</div>';
 			
 			
 				$('#info_and_search_content').html(searchResults);
