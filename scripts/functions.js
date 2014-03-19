@@ -179,7 +179,24 @@ function applyFilters() {
 	});
 	
 	var queryString = $('#autocomplete').val()+facetString;
-	getAndAppendSearchResults(queryString, 0, true);
+	
+	// Check if there is a date range filter in play
+	//-----------------------------------------------------------------
+	//Ensure that startDate is in the correct format
+	var filter = new RegExp("([1-2][0-9][0-9][0-9])");
+
+	var startDateVal = $("#startDate").val();
+	var endDateVal = $("#endDate").val();
+
+	var dateRangeQuery = '';
+	
+	if(filter.test(startDateVal) && filter.test(endDateVal)){							
+		// Use start and end Year to do a range query
+		dateRangeQuery = '&fq=date:['+startDateVal+'-01-01T00:00:00Z'+' TO '+endDateVal+'-12-31T00:00:00Z'+']';
+	}
+	//-----------------------------------------------------------------
+	
+	getAndAppendSearchResults(queryString+dateRangeQuery, 0, true);
 }
 
 
@@ -310,17 +327,11 @@ $(document).ready(function(){
 					// Get Language, publisher, date Facet categories
 					var languageFacets = '';
 					var subjectFacets = '';
-					//var dateFacets = '';
 					
 					var languageLength = Math.min(data.facet_counts.facet_fields.language.length, 10);
 					for (var t=0; t< languageLength; t+=2){
 							languageFacets += "<li class='list-group-item'><label class='plain'><input type='checkbox' onClick='applyFilters()' value='language:"+data.facet_counts.facet_fields.language[t]+"'> "+data.facet_counts.facet_fields.language[t]+ '</label><span class="badge">'+data.facet_counts.facet_fields.language[t+1]+'</span></li>';
 					}	
-					
-					//var dateLength = Math.min(data.facet_counts.facet_fields.date.length, 10);
-					//for (var t=0; t< dateLength; t+=2){
-					//		dateFacets += "<li class='list-group-item'><label class='plain'><input type='checkbox' onClick='applyFilters()' value='date:"+data.facet_counts.facet_fields.date[t]+"'> "+(data.facet_counts.facet_fields.date[t]+'').substring(0, 4)+ '</label><span class="badge">'+data.facet_counts.facet_fields.date[t+1]+'</span></li>';				
-					//}
 					
 					var subjectLength = Math.min(data.facet_counts.facet_fields.subject.length, 10);
 					for (var t=0; t< subjectLength; t+=2){
@@ -328,7 +339,6 @@ $(document).ready(function(){
 					}
 					
 					// FACET SIDEBAR
-					//------------------------------------------------------------------------------------------------------------------------------
 					$('#facet_content').html(
 					
 					"<div class='page-header'><h3>Refine search</h3></div>"+
@@ -364,9 +374,7 @@ $(document).ready(function(){
 						if(filter.test(startDateVal) && filter.test(endDateVal)){							
 							$("#rangeStatus").html('');
 							// Use start and end Year to do a range query
-							//
 							var dateRangeQuery = '&fq=date:['+startDateVal+'-07-01T00:00:00Z'+' TO '+endDateVal+'-07-01T00:00:00Z'+']';
-							//alert(getCurrentFilters()+dateRangeQuery);
 							getAndAppendSearchResults(getCurrentFilters()+dateRangeQuery, 0, true);
 						}
 						else{
@@ -379,17 +387,9 @@ $(document).ready(function(){
 			
 			});
 		}
-		//------------------------------------------------------------------------------------------------------------------------------
+		
 		return false;
 	});
-	
-	
-	
-	
-	
-		
-		
-
 });
 
 
