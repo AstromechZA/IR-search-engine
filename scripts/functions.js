@@ -34,8 +34,42 @@ function toggleInfo(docNumber){
 
 }
 
-
-
+var langcodes = {
+	'ar':'Arabic',
+	'bg':'Bulgarian',
+	'ca':'Catalan',
+	'cz':'Czech',
+	'da':'Danish',
+	'de':'German',
+	'el':'Greek',
+	'en':'English',
+	'es':'Spanish',
+	'eu':'Basque',
+	'fa':'Persian',
+	'fi':'Finnish',
+	'fr':'French',
+	'ga':'Irish',
+	'gl':'Galician',
+	'hi':'Hindi',
+	'hu':'Hungarian',
+	'hy':'Armenian',
+	'id':'Indonesian',
+	'it':'Italian',
+	'ja':'Japanese',
+	'lv':'Latvian',
+	'nl':'Dutch',
+	'no':'Norwegian',
+	'pt':'Portuguese',
+	'ro':'Romanian',
+	'ru':'Russian',
+	'sv':'Swedish',
+	'th':'Thai',
+	'tr':'Turkish',
+	'general':'General'
+};
+function translateShortLangToLong(shortform) {
+	return langcodes[shortform];
+}
 
 // Start Position refers to the position at which the documents to be queried should start from
 function getAndAppendSearchResults(query, startPosition, faceted){
@@ -327,7 +361,7 @@ $(document).ready(function(){
 					var languageLength = Math.min(data.facet_counts.facet_fields.detectedlanguage.length, 10);
 					for (var t=0; t< languageLength; t+=2){
 						if (data.facet_counts.facet_fields.detectedlanguage[t+1] > 0) {
-							languageFacets += "<li class='list-group-item'><label class='plain'><input type='checkbox' onClick='applyFilters()' value='detectedlanguage:"+data.facet_counts.facet_fields.detectedlanguage[t]+"'> "+data.facet_counts.facet_fields.detectedlanguage[t]+ '</label><span class="badge">'+data.facet_counts.facet_fields.detectedlanguage[t+1]+'</span></li>';
+							languageFacets += "<li class='list-group-item'><label class='plain'><input type='checkbox' onClick='applyFilters()' value='detectedlanguage:"+data.facet_counts.facet_fields.detectedlanguage[t]+"'> "+translateShortLangToLong(data.facet_counts.facet_fields.detectedlanguage[t])+ '</label><span class="badge">'+data.facet_counts.facet_fields.detectedlanguage[t+1]+'</span></li>';
 						}
 					}	
 					
