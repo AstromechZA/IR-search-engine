@@ -136,11 +136,13 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 					
 					shortFormResult += '<span class="identifier">' + (val.identifier+'').trunc(100) + '</span></div>';
 					longFormResult += '<span class="identifier">' + val.identifier + '</span></div>';
-					arrowthing = '<div style="width:30px; height: 20px; padding-top: 2px; float:right;"><a href="javascript:;" class="dropdown"><div class="arrow_document arrow_change" onClick="toggleInfo(' + documentNumber + ')"></div></a></div>';
+					
+					arrowthing = '<div style="float:right;"><a href="javascript:;" class="dropdown"><div class="arrow_document arrow_change" onClick="toggleInfo(' + documentNumber + ')"></div></a></div>';
 
-					var flowleftwrap = '<div style="float:left">' + shortFormResult + longFormResult + '</div>';
+					shortFormResult = '<div style="float:left">' + shortFormResult + '</div>'
+					longFormResult = '<div style="float:left">' + longFormResult + '</div>'
 
-					searchResults += '<div class="result-block">' + flowleftwrap + arrowthing + '<div class="clearfix"></div></div>';
+					searchResults += '<div class="result-block">' + arrowthing + shortFormResult + longFormResult + '<div class="clearfix"></div></div>';
 
 
 				});
