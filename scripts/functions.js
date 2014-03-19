@@ -107,8 +107,8 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 					}
 					//--------------------------------------------
 					
-					searchResults += '<div id="documentDetails:' + documentNumber + '" class="show" style="padding-bottom:10px; width: 570px; float:left;"><a class="link" href="' + val.identifier + '">' + (val.title+'').trunc(67) + '</a><br />'; 
-					longSearchResults += '<div class="hide" id="documentDetailsLong:' + documentNumber + '" style=" padding-bottom:10px; width: 570px; float:left;"><a class="link" href="' + val.identifier + '">' + val.title + '</a><br />'; 					
+					searchResults += '<div id="documentDetails:' + documentNumber + '" class="show" style="padding-bottom:10px;"><a class="link" href="' + val.identifier + '">' + (val.title+'').trunc(67) + '</a><br />'; 
+					longSearchResults += '<div class="hide" id="documentDetailsLong:' + documentNumber + '" style=" padding-bottom:10px;"><a class="link" href="' + val.identifier + '">' + val.title + '</a><br />'; 					
 					if (val.author != '' && typeof(val.author) != 'undefined'){
 						searchResults += '<span class="authors">' + val.author;
 						longSearchResults += '<span class="authors">' + val.author;
