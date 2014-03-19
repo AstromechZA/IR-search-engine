@@ -297,7 +297,7 @@ $(document).ready(function(){
 		dataType: 'jsonp'
 	});
 	
-	$('#search_form').submit(function() {
+	$('#search_form').submit(function(event) {
 		event.preventDefault();
 		
 		//get value of the entire input field
