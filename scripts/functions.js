@@ -504,6 +504,9 @@ $(document).ready(function(){
 						}
 
 					});
+				} else {
+					$('#documentStatus').html('');
+					$('#facet_content').html('');
 				}
 
 			});
