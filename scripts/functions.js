@@ -240,25 +240,21 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 				if (faceted){
 
 					$('#documentStatus').html("<h5>Displaying 1-"+ Math.min(10, data.response.numFound) + " of " + data.response.numFound + " documents.</h5>");
-					var numDocuments = Math.min(Math.ceil(data.response.numFound / 10.0), 100)-1;
+					var numPages = Math.min(Math.ceil(data.response.numFound / 10.0), 100);
 
 					$("#pagination").pagination('destroy');
 
 					// Pagination
 					$(function() {
 						$("#pagination").pagination({
-							pages: numDocuments,
+							pages: numPages,
 							cssStyle: 'light-theme',
 							onPageClick: function(pageNumber, event){
-								var pageStart = parseInt(pageNumber*10)+parseInt(1);
-								if (pageNumber > numDocuments){
-									$('#documentStatus').html("<h5>Displaying " + pageStart + "-" + numDocuments + " of " + data.response.numFound + " documents.</h5>");
-								}
-								else{
-									var pageTo = parseInt(pageNumber*10)+parseInt(10);
-									$('#documentStatus').html("<h5>Displaying " + pageStart + "-" + Math.min(pageTo, data.response.numFound) + " of " + data.response.numFound + " documents.</h5>");
-								}
-								getAndAppendSearchResults(query, pageNumber*10, false);
+								var pageStart = parseInt((pageNumber-1)*10) + 1;
+								var pageTo = parseInt(pageNumber*10);
+								$('#documentStatus').html("<h5>Displaying " + pageStart + "-" + Math.min(pageTo, data.response.numFound) + " of " + data.response.numFound + " documents.</h5>");
+								
+								getAndAppendSearchResults(query, (pageNumber-1)*10, false);
 							}
 						});
 					});
@@ -418,9 +414,10 @@ $(document).ready(function(){
 
 			$.get("http://people.cs.uct.ac.za/~bmeier/solr.php?q="+inputQuery+"&facet=true&facet.limit=5&facet.field=detectedlanguage&facet.field=subject",function(data,status){
 
-				var numPages = Math.min(Math.ceil(data.response.numFound / 10.0), 100)-1;
+				var numPages = Math.min(Math.ceil(data.response.numFound / 10.0), 100);
 
 				if(data.response.docs.length > 0){
+
 
 					$('#documentStatus').html("<h5>Displaying 1-"+ Math.min(10, data.response.numFound) + " of " + data.response.numFound + " documents.</h5>");
 
@@ -430,15 +427,12 @@ $(document).ready(function(){
 							pages: numPages,
 							cssStyle: 'light-theme',
 							onPageClick: function(pageNumber, event){
-								var pageTo = parseInt(pageNumber*10)+parseInt(10);
-								if (pageNumber < numPages){
-									var pageStart = parseInt(pageNumber*10)+parseInt(1);
-									$('#documentStatus').html("<h5>Displaying " + pageStart + "-" + Math.min(pageTo, data.response.numFound) + " of " + data.response.numFound + " documents.</h5>");
-								}
-								else{
-									$('#documentStatus').html("<h5>Displaying " + pageStart + "-" + data.response.numFound + " of " + data.response.numFound + " documents.</h5>");
-								}
-								getAndAppendSearchResults(inputQuery, pageNumber*10, false);
+								var pageTo = parseInt(pageNumber*10);
+								var pageStart = parseInt((pageNumber-1)*10) + 1;
+		
+								$('#documentStatus').html("<h5>Displaying " + pageStart + "-" + Math.min(pageTo, data.response.numFound) + " of " + data.response.numFound + " documents.</h5>");
+
+								getAndAppendSearchResults(inputQuery, (pageNumber-1)*10, false);
 							}
 						});
 					});
@@ -498,7 +492,7 @@ $(document).ready(function(){
 						if(filter.test(startDateVal) && filter.test(endDateVal)){
 							$("#rangeStatus").html('');
 							// Use start and end Year to do a range query
-							var dateRangeQuery = '&fq=date:['+startDateVal+'-01-01T00:00:00Z'+' TO '+endDateVal+'-07-01T00:00:00Z'+']';
+							var dateRangeQuery = '&fq=date:['+startDateVal+'-01-01T00:00:00Z'+' TO '+endDateVal+'-12-31T00:00:00Z'+']';
 							getAndAppendSearchResults(getCurrentFilters()+dateRangeQuery, 0, true);
 						}
 						else{
