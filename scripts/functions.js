@@ -177,7 +177,6 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 						longFormResult += t;
 					}
 
-					console.log(val)
 					longFormResult += '<strong>Description:  </strong> ' + sanitizePrefix(val.description+'') + '<br />';
 					longFormResult += '<strong>Publisher:  </strong> ' + (val.publisher+'') + '<br />';
 					longFormResult += '<strong>Subject:  </strong> ' + mvPrint(val.subject) + '<br />';
