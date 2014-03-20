@@ -117,7 +117,9 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 	if (query != ''){
 		$('#search-title').show();
 		// Get search data
+		$("body").css("cursor", "progress");
 		$.get("http://people.cs.uct.ac.za/~bmeier/solr.php?q="+query+"&start="+startPosition,function(data,status){
+			$("body").css("cursor", "default");
 			var searchResults = '';
 			// Loop through each doc
 			var documents = data.response.docs;
@@ -411,8 +413,9 @@ $(document).ready(function(){
 
 			getAndAppendSearchResults(inputQuery, 0, false);
 
+			$("body").css("cursor", "progress");
 			$.get("http://people.cs.uct.ac.za/~bmeier/solr.php?q="+inputQuery+"&facet=true&facet.limit=5&facet.field=detectedlanguage&facet.field=subject",function(data,status){
-
+				$("body").css("cursor", "default");
 				var numPages = Math.min(Math.ceil(data.response.numFound / 10.0), 100);
 
 				if(data.response.docs.length > 0){
