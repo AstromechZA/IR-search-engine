@@ -55,7 +55,6 @@ function strip(html)
 }
 
 function sanitize(s) {
-	s = s.replace(/[^a-zA-Z]*/, "");
 	return s;
 }
 
