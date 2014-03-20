@@ -253,7 +253,7 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 								var pageStart = parseInt((pageNumber-1)*10) + 1;
 								var pageTo = parseInt(pageNumber*10);
 								$('#documentStatus').html("<h5>Displaying " + pageStart + "-" + Math.min(pageTo, data.response.numFound) + " of " + data.response.numFound + " documents.</h5>");
-								
+
 								getAndAppendSearchResults(query, (pageNumber-1)*10, false);
 							}
 						});
@@ -429,7 +429,7 @@ $(document).ready(function(){
 							onPageClick: function(pageNumber, event){
 								var pageTo = parseInt(pageNumber*10);
 								var pageStart = parseInt((pageNumber-1)*10) + 1;
-		
+
 								$('#documentStatus').html("<h5>Displaying " + pageStart + "-" + Math.min(pageTo, data.response.numFound) + " of " + data.response.numFound + " documents.</h5>");
 
 								getAndAppendSearchResults(inputQuery, (pageNumber-1)*10, false);
