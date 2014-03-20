@@ -70,21 +70,8 @@
             </div>
             <div class="col-lg-8">
                 <h3>Daily index updates</h3>
-                <p>Everyday at approximately 1 AM, the last 24 hours worth of articles are downloaded and indexed. This table shows the number of documents added each morning. </p>
-                <table class="table table-bordered table-striped table-condensed">
-                  <thead>
-                    <tr>
-                      <th>Date/Time</th>
-                      <th>Documents added</th>
-                    </tr>
-                  </thead>
-                  <tbody id="update_table">
-                    <tr>
-                      <td>No records</td>
-                      <td>...</td>
-                    </tr>
-                  </tbody>
-                </table>
+                <p>Everyday at approximately 1 AM, the last 24 hours worth of articles are downloaded and indexed. The graph below shows the daily number of new documents added to the database. </p>
+				<div id="update_graph"></div>
                 <br />
                 <h3>Subjects</h3>
                 <p>And just for fun, a tag cloud of the most common terms used in the 'subject' field. </p>
@@ -102,6 +89,7 @@
     </div>
 
     <script type="text/javascript" src="scripts/bootstrap.min.js"></script>
+	<script type="text/javascript" src="scripts/highstock.js"></script>
     <script type="text/javascript" src="scripts/statspage.js"></script>
 </body>
 </html>

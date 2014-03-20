@@ -58,14 +58,65 @@ $(function(){
     });
 
     $.get("http://people.cs.uct.ac.za/~bmeier/solr_update_state.php", function(data, status) {
+	
+		var data2 = [];
+		$.each(data.data, function(index, point){
+			data2.push([Date.parse(point.ts), point.delta]);			
+		});
+		
+		data2.reverse();
 
-        $('#update_table').html('');
+		var count_chart = new Highcharts.StockChart({
+		  chart: {
+			renderTo: 'update_graph',
+			height: 400
+		  },
+	  
+		  rangeSelector: {
+			buttons: [ {
+				type: 'week',
+				count: 1,
+				text: '1w'
+			  }, {
+				type: 'all',
+				text: 'All'
+			}],
+			selected: 1
+		  },
+	  
+		  xAxis: {
+			ordinal: false
+		  },
+	  
+		  yAxis: {
+			title: {
+			  text: 'Count'
+			}
+		  },
+	  
+		  title: {
+			text: 'New documents submitted per day'
+		  },
+	  
+		  tooltip: {
+			formatter: function() {
+				var s = Highcharts.dateFormat('%H:%M - %a, %b %e, %Y', this.x);
 
-        var d = data.data;
+				$.each(this.points, function(i, point) {
+				  s += '<br><span style="color:'+point.series.color+'; font-weight: bold;">'+point.series.name+':</span> '+numberWithCommas(point.y)+'';
+				});
 
-        for (var i = 0; i < d.length; i++) {
-            $('#update_table').append('<tr><td>'+d[i].ts+'</td><td>'+d[i].delta+'</td></tr>');
-        };
+				return s;
+			},
+			useHTML: true
+		  },
+	  
+		  series: [{
+				type: 'column',
+				name: 'New documents',
+				data: data2
+			}]
+		});
 
     });
 
