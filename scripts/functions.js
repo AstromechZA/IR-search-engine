@@ -63,13 +63,14 @@ function replacestrongs(s) {
 }
 
 function correctidlink(sa) {
-	if (typeof arrayorstring == 'string') {
-		arrayorstring = [arrayorstring]
+
+	if (typeof sa == 'string') {
+		sa = [sa]
 	}
-	if (typeof arrayorstring == 'undefined') {
+	if (typeof sa == 'undefined') {
 		return '#'
 	}
-	return arrayorstring[0];
+	return sa[0];
 }
 
 var langcodes = {
