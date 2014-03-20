@@ -21,7 +21,7 @@ function getSelectedFacets()
 }
 
 
-function toggleInfo(docNumber){
+function toggleInfo(docNumber) {
 
 	var currentClassOfDocumentDetails = document.getElementById("documentDetails:"+docNumber).className;
 	var currentClassOfDocumentDetailsLong = document.getElementById("documentDetailsLong:"+docNumber).className;
@@ -36,6 +36,28 @@ function toggleInfo(docNumber){
 	}
 
 }
+
+function mvPrint(arrayorstring) {
+	if (typeof arrayorstring == 'string') {
+		arrayorstring = [arrayorstring]
+	}
+	if (typeof arrayorstring == 'undefined') {
+		return 'undefined'
+	}
+	return arrayorstring.join(', ')
+}
+
+function strip(html)
+{
+   var tmp = document.createElement("DIV");
+   tmp.innerHTML = html;
+   return tmp.textContent || tmp.innerText || "";
+}
+
+function sanitizePrefix(s) {
+	return strip(s).replace(/[^a-zA-Z]*/, '')
+}
+
 
 var langcodes = {
 	'ar':'Arabic',
@@ -122,7 +144,7 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 					var t = '<span class="authors">'
 
 					if (val.author != '' && typeof(val.author) != 'undefined') {
-						t += val.author;
+						t += mvPrint(val.author);
 						t += ' '
 					}
 					if (val.date != '' && typeof(val.date) != 'undefined') {
@@ -134,16 +156,16 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 						shortFormResult += t;
 					}
 					if (highlightedDescription) {
-						shortFormResult += '"' + (highlightedDescription+'').trunc(250) + '"<br />';
+						shortFormResult += '"' + sanitizePrefix(highlightedDescription+'').trunc(250) + '"<br />';
 					}
-					shortFormResult += '<span class="identifier">' + (val.identifier+'').trunc(100) + '</span></div>';
+					shortFormResult += '<span class="identifier">' + mvPrint(val.identifier).trunc(100) + '</span></div>';
 
 					// build long form
 					longFormResult = '<div class="hide" id="documentDetailsLong:' + documentNumber + '" style="padding-bottom:10px;"><a class="link" href="' + val.identifier + '">' + (val.title+'') + '</a><br />';
 					var t = '<span class="authors">'
 
 					if (val.author != '' && typeof(val.author) != 'undefined') {
-						t += val.author;
+						t += mvPrint(val.author);
 						t += ' '
 					}
 					if (val.date != '' && typeof(val.date) != 'undefined') {
@@ -154,12 +176,16 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 					if (t.length > 30) {
 						longFormResult += t;
 					}
-					console.log(val)
-					longFormResult += '<strong>Description:  </strong> ' + (val.description+'') + '<br />';
-					longFormResult += '<strong>Publisher:  </strong> ' + (val.publisher+'') + '<br />';
-					longFormResult += '<strong>Subject:  </strong> ' + (val.subject+'') + '<br />';
 
-					longFormResult += '<span class="identifier">' + (val.identifier+'') + '</span></div>';
+					console.log(val)
+					longFormResult += '<strong>Description:  </strong> ' + sanitizePrefix(val.description+'') + '<br />';
+					longFormResult += '<strong>Publisher:  </strong> ' + (val.publisher+'') + '<br />';
+					longFormResult += '<strong>Subject:  </strong> ' + mvPrint(val.subject) + '<br />';
+					longFormResult += '<strong>Rights:  </strong> ' + mvPrint(val.rights) + '<br />';
+					longFormResult += '<strong>Contributor:  </strong> ' + mvPrint(val.contributor) + '<br />';
+					longFormResult += '<strong>Type:  </strong> ' + mvPrint(val.type) + '<br />';
+
+					longFormResult += '<span class="identifier">' + mvPrint(val.identifier) + '</span></div>';
 
 					//
 					arrowthing = '<div style="float:right;"><a href="javascript:;" class="dropdown"><div class="arrow_document arrow_change" onClick="toggleInfo(' + documentNumber + ')"></div></a></div>';
