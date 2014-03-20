@@ -55,7 +55,7 @@ function strip(html)
 }
 
 function sanitize(s) {
-	s = s.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+	s = s.replace(/[^a-zA-Z]/, "");
 	return s;
 }
 
