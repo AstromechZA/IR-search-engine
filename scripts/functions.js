@@ -68,7 +68,7 @@ function correctidlink(sa) {
 		arrayorstring = [arrayorstring]
 	}
 	if (typeof arrayorstring == 'undefined') {
-		return 'undefined'
+		return '#'
 	}
 	return arrayorstring[0];
 }
@@ -159,7 +159,7 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 					//--------------------------------------------
 
 					// build short form
-					shortFormResult = '<div id="documentDetails:' + documentNumber + '" class="show" style="padding-bottom:10px;"><a class="link" href="' + correctidlink(val.identifier) + '">' + replacestrongs(sanitize(mvPrint(highlightedTitle)) || 'undefined') + '</a><br />';
+					shortFormResult = '<div id="documentDetails:' + documentNumber + '" class="show" style="padding-bottom:10px;"><a class="link" href="' + correctidlink(val.identifier) + '">' + replacestrongs(sanitize(mvPrint(highlightedTitle))) + '</a><br />';
 					var t = '<span class="authors">'
 
 					if (val.author != '' && typeof(val.author) != 'undefined') {
@@ -202,6 +202,7 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 					longFormResult += '<strong>Rights:  </strong> ' + mvPrint(val.rights) + '<br />';
 					longFormResult += '<strong>Contributor:  </strong> ' + mvPrint(val.contributor) + '<br />';
 					longFormResult += '<strong>Type:  </strong> ' + mvPrint(val.type) + '<br />';
+					longFormResult += '<strong>Language:  </strong> ' + mvPrint(val.language) + '<br />';
 
 					longFormResult += '<span class="identifier">' + mvPrint(val.identifier) + '</span></div>';
 
