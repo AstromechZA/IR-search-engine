@@ -54,10 +54,24 @@ function strip(html)
    return tmp.textContent || tmp.innerText || "";
 }
 
-function sanitizePrefix(s) {
-	return strip(s).replace(/[^a-zA-Z]*/, '')
+function sanitize(s) {
+	s = s.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+	return s;
 }
 
+function replacestrongs(s) {
+	return s.replace(/&lt;strong&gt;/g, '<strong>').replace(/&lt;\/strong&gt;/g, '</strong>')
+}
+
+function correctidlink(sa) {
+	if (typeof arrayorstring == 'string') {
+		arrayorstring = [arrayorstring]
+	}
+	if (typeof arrayorstring == 'undefined') {
+		return 'undefined'
+	}
+	return arrayorstring[0];
+}
 
 var langcodes = {
 	'ar':'Arabic',
@@ -132,15 +146,20 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 					var documentId = val.id;
 					var detectedLanguage = val.detectedlanguage;
 					var highlightedDescription = data.highlighting[documentId+'']['description_'+detectedLanguage];
+					var highlightedTitle = data.highlighting[documentId+'']['title_'+detectedLanguage];
 
 					// If highlighted description is undefined set it to the normal description
 					if (typeof(highlightedDescription) == 'undefined'){
 						highlightedDescription = val.description;
 					}
+					// If highlighted title is undefined set it to the normal title
+					if (typeof(highlightedTitle) == 'undefined'){
+						highlightedTitle = val.title;
+					}
 					//--------------------------------------------
 
 					// build short form
-					shortFormResult = '<div id="documentDetails:' + documentNumber + '" class="show" style="padding-bottom:10px;"><a class="link" href="' + val.identifier + '">' + (val.title+'').trunc(67) + '</a><br />';
+					shortFormResult = '<div id="documentDetails:' + documentNumber + '" class="show" style="padding-bottom:10px;"><a class="link" href="' + correctidlink(val.identifier) + '">' + replacestrongs(sanitize(mvPrint(highlightedTitle)) || 'undefined') + '</a><br />';
 					var t = '<span class="authors">'
 
 					if (val.author != '' && typeof(val.author) != 'undefined') {
@@ -156,12 +175,12 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 						shortFormResult += t;
 					}
 					if (highlightedDescription) {
-						shortFormResult += '"' + sanitizePrefix(highlightedDescription+'').trunc(250) + '"<br />';
+						shortFormResult += '"' + replacestrongs(sanitize(highlightedDescription+'')) + '"<br />';
 					}
 					shortFormResult += '<span class="identifier">' + mvPrint(val.identifier).trunc(100) + '</span></div>';
 
 					// build long form
-					longFormResult = '<div class="hide" id="documentDetailsLong:' + documentNumber + '" style="padding-bottom:10px;"><a class="link" href="' + val.identifier + '">' + (val.title+'') + '</a><br />';
+					longFormResult = '<div class="hide" id="documentDetailsLong:' + documentNumber + '" style="padding-bottom:10px;"><a class="link" href="' + correctidlink(val.identifier) + '">' + (sanitize(mvPrint(val.title)) || 'undefined') + '</a><br />';
 					var t = '<span class="authors">'
 
 					if (val.author != '' && typeof(val.author) != 'undefined') {
@@ -177,7 +196,7 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 						longFormResult += t;
 					}
 
-					longFormResult += '<strong>Description:  </strong> ' + sanitizePrefix(val.description+'') + '<br />';
+					longFormResult += '<strong>Description:  </strong> ' + sanitize(strip(val.description)) + '<br />';
 					longFormResult += '<strong>Publisher:  </strong> ' + (val.publisher+'') + '<br />';
 					longFormResult += '<strong>Subject:  </strong> ' + mvPrint(val.subject) + '<br />';
 					longFormResult += '<strong>Rights:  </strong> ' + mvPrint(val.rights) + '<br />';
