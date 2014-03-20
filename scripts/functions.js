@@ -55,7 +55,7 @@ function strip(html)
 }
 
 function sanitize(s) {
-	s = s.replace(/[^a-zA-Z]/, "");
+	s = s.replace(/[^a-zA-Z]*/, "");
 	return s;
 }
 
@@ -159,7 +159,7 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 					//--------------------------------------------
 
 					// build short form
-					shortFormResult = '<div id="documentDetails:' + documentNumber + '" class="show" style="padding-bottom:10px;"><a class="link" href="' + correctidlink(val.identifier) + '">' + replacestrongs(sanitize(mvPrint(highlightedTitle))) + '</a><br />';
+					shortFormResult = '<div id="documentDetails:' + documentNumber + '" class="show" style="padding-bottom:10px;"><a class="link" href="' + correctidlink(val.identifier) + '">' + replacestrongs(mvPrint(highlightedTitle)) + '</a><br />';
 					var t = '<span class="authors">'
 
 					if (val.author != '' && typeof(val.author) != 'undefined') {
@@ -253,7 +253,7 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 								var pageStart = parseInt((pageNumber-1)*10) + 1;
 								var pageTo = parseInt(pageNumber*10);
 								$('#documentStatus').html("<h5>Displaying " + pageStart + "-" + Math.min(pageTo, data.response.numFound) + " of " + data.response.numFound + " documents.</h5>");
-								
+
 								getAndAppendSearchResults(query, (pageNumber-1)*10, false);
 							}
 						});
@@ -356,7 +356,7 @@ $(document).ready(function(){
 			$("#pagination").pagination('destroy');
 			$('#documentStatus').html("");
 			$('#search-title').hide();
-			$('#info_and_search_content').html("<h3>Some useful tips to improve your search results:</h3><table class='table table-bordered table-striped table-condensed' style='padding-bottom:10px;' ><tr><th><h4><b>Query </b></h4></th><td><h4><b>Displays documents:</b></h4></td></tr><tr><th><b>subject:</b>”visualisation”</th><td> where the subject includes the word “visualisation'</td></tr><tr><th><b>title:</b>”computers”</th><td> where the title includes the word 'computer'</td></tr><tr><th><b>author:</b>”Hussein, Saladman”</th><td> where the author is “Hussein, Saladman”</td></tr><tr><th><b>description:</b>”water rates”</th><td> where the description includes “water rates”</td></tr><tr><th><b>publisher:</b>'McGill University'</th><td> where the publisher is “McGill University”</td></tr><tr><th><b>language:</b>”english”</th><td> where the language is “english”</td></tr><tr><th>apples <b>AND</b> bananas</th><td> that contain both 'apples' and 'bananas'</td></tr><tr><th>apples <b>NOT</b> bananas</th><td> that contain 'apples' and do not contain 'bananas'</td></tr></table><h3>Documents are returned in the following format:</h3><table class='table table-bordered table-striped table-condensed' ><td><span style='color: #324FE1;font-weight: bold;'>Title</span><br><span style='color: #1e0fbe;'> Authors - Year - Document Language</span><br>Description <br><span style='color: #009030;'>URL</span><br></div></td></table>");
+			$('#info_and_search_content').html("<h3>Some useful tips to improve your search results:</h3><table class='table table-bordered table-striped table-condensed' style='padding-bottom:10px;' ><tr><th><h4><b>Query </b></h4></th><td><h4><b>Displays documents:</b></h4></td></tr><tr><th><b>subject:</b>”visualisation”</th><td> where the subject includes the word “visualisation'</td></tr><tr><th><b>title:</b>”computers”</th><td> where the title includes the word 'computer'</td></tr><tr><th><b>author:</b>”Hussein, Suleman”</th><td> where the author is “Hussein, Suleman”</td></tr><tr><th><b>description:</b>”water rates”</th><td> where the description includes “water rates”</td></tr><tr><th><b>publisher:</b>'McGill University'</th><td> where the publisher is “McGill University”</td></tr><tr><th><b>language:</b>”english”</th><td> where the language is “english”</td></tr><tr><th>apples <b>AND</b> bananas</th><td> that contain both 'apples' and 'bananas'</td></tr><tr><th>apples <b>NOT</b> bananas</th><td> that contain 'apples' and do not contain 'bananas'</td></tr></table><h3>Documents are returned in the following format:</h3><table class='table table-bordered table-striped table-condensed' ><td><span style='color: #324FE1;font-weight: bold;'>Title</span><br><span style='color: #1e0fbe;'> Authors - Year - Document Language</span><br>Description <br><span style='color: #009030;'>URL</span><br></div></td></table>");
 
 		}
 	});
@@ -429,7 +429,7 @@ $(document).ready(function(){
 							onPageClick: function(pageNumber, event){
 								var pageTo = parseInt(pageNumber*10);
 								var pageStart = parseInt((pageNumber-1)*10) + 1;
-		
+
 								$('#documentStatus').html("<h5>Displaying " + pageStart + "-" + Math.min(pageTo, data.response.numFound) + " of " + data.response.numFound + " documents.</h5>");
 
 								getAndAppendSearchResults(inputQuery, (pageNumber-1)*10, false);
