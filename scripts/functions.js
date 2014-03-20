@@ -119,28 +119,49 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 
 					// build short form
 					shortFormResult = '<div id="documentDetails:' + documentNumber + '" class="show" style="padding-bottom:10px;"><a class="link" href="' + val.identifier + '">' + (val.title+'').trunc(67) + '</a><br />';
-					longFormResult = '<div class="hide" id="documentDetailsLong:' + documentNumber + '" style=" padding-bottom:10px;"><a class="link" href="' + val.identifier + '">' + val.title + '</a><br />';
-					if (val.author != '' && typeof(val.author) != 'undefined'){
-						shortFormResult += '<span class="authors">' + val.author;
-						longFormResult += '<span class="authors">' + val.author;
-						if (val.date != '' && typeof(val.date) != 'undefined'){
-							shortFormResult += ' - ' + (val.date+'').substring(0, 4) + ' - ' + translateShortLangToLong(val.detectedlanguage) +'';
-							longFormResult += ' - ' + (val.date+'').substring(0, 10) + ' - ' + translateShortLangToLong(val.detectedlanguage) +'';
-						}
+					var t = '<span class="authors">'
 
-						shortFormResult += '</span><br />';
-						longFormResult += '</span><br />';
+					if (val.author != '' && typeof(val.author) != 'undefined') {
+						t += val.author;
+						t += ' '
 					}
-
-					if (highlightedDescription != '' && typeof(highlightedDescription) != 'undefined'){
-						shortFormResult += (highlightedDescription+'').trunc(250) + '<br />';
-						longFormResult += highlightedDescription + '<br />';
+					if (val.date != '' && typeof(val.date) != 'undefined') {
+						t += '[ ' + (val.date+'').substring(0, 4) + ' ] ';
 					}
-
-
+					t += translateShortLangToLong(val.detectedlanguage);
+					t += '</span><br />';
+					if (t.length > 34) {
+						shortFormResult += t;
+					}
+					if (highlightedDescription) {
+						shortFormResult += '"' + (highlightedDescription+'').trunc(250) + '"<br />';
+					}
 					shortFormResult += '<span class="identifier">' + (val.identifier+'').trunc(100) + '</span></div>';
-					longFormResult += '<span class="identifier">' + val.identifier + '</span></div>';
 
+					// build long form
+					longFormResult = '<div class="hide" id="documentDetailsLong:' + documentNumber + '" style="padding-bottom:10px;"><a class="link" href="' + val.identifier + '">' + (val.title+'') + '</a><br />';
+					var t = '<span class="authors">'
+
+					if (val.author != '' && typeof(val.author) != 'undefined') {
+						t += val.author;
+						t += ' '
+					}
+					if (val.date != '' && typeof(val.date) != 'undefined') {
+						t += '[ ' + (val.date+'').substring(0, 10) + ' ] ';
+					}
+					t += translateShortLangToLong(val.detectedlanguage);
+					t += '</span><br />';
+					if (t.length > 30) {
+						longFormResult += t;
+					}
+					console.log(val)
+					longFormResult += '<strong>Description:  </strong> ' + (val.description+'') + '<br />';
+					longFormResult += '<strong>Publisher:  </strong> ' + (val.publisher+'') + '<br />';
+					longFormResult += '<strong>Subject:  </strong> ' + (val.subject+'') + '<br />';
+
+					longFormResult += '<span class="identifier">' + (val.identifier+'') + '</span></div>';
+
+					//
 					arrowthing = '<div style="float:right;"><a href="javascript:;" class="dropdown"><div class="arrow_document arrow_change" onClick="toggleInfo(' + documentNumber + ')"></div></a></div>';
 
 					shortFormResult = '<div style="float:left; width:95%">' + shortFormResult + '</div>'
@@ -409,7 +430,7 @@ $(document).ready(function(){
 						"<li class='list-group-item-date-range'><form class='form-inline'><input id='startDate' class='form-control input-sm date-input' type='text' maxlength='4' size='5' placeholder='Year' style='width: 50px;'> to <input id='endDate' class='form-control input-sm date-input' type='text' maxlength='4' size='5' placeholder='Year' style='width: 50px;'><a id='dateRangeSubmit' class='btn btn-primary btn-sm' style='float:right;'>Update</a></form><div id='rangeStatus'></div></li>" +
 					"</ul>"+
 					"<ul class='list-group'>"+
-						"<li class='list-group-item' style='background-color: #dd4814; border-color: #dd4814; color: #fff;'>Subject</li>" +
+						"<li class='list-group-item' style='background-color: #dd4814; border-color: #dd4814; color: #fff;'>Subject contains</li>" +
 						subjectFacets +
 					"</ul>");
 
