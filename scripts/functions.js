@@ -55,7 +55,7 @@ function strip(html)
 }
 
 function sanitize(s) {
-	s = s.replace(/[^a-zA-Z]/, "");
+	s = s.replace(/[^a-zA-Z]*/, "");
 	return s;
 }
 
@@ -159,7 +159,7 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 					//--------------------------------------------
 
 					// build short form
-					shortFormResult = '<div id="documentDetails:' + documentNumber + '" class="show" style="padding-bottom:10px;"><a class="link" href="' + correctidlink(val.identifier) + '">' + replacestrongs(sanitize(mvPrint(highlightedTitle))) + '</a><br />';
+					shortFormResult = '<div id="documentDetails:' + documentNumber + '" class="show" style="padding-bottom:10px;"><a class="link" href="' + correctidlink(val.identifier) + '">' + replacestrongs(mvPrint(highlightedTitle)) + '</a><br />';
 					var t = '<span class="authors">'
 
 					if (val.author != '' && typeof(val.author) != 'undefined') {
