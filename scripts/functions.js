@@ -10,7 +10,7 @@ function getSelectedFacets()
 {
 	var selectedFacets=new Array();
 	var count = 0;
-	
+
 	$('.list-group-item input:checkbox').each(function () {
 		if (this.checked){
 			selectedFacets[count] = $(this).val();
@@ -25,10 +25,10 @@ function toggleInfo(docNumber){
 
 	var currentClassOfDocumentDetails = document.getElementById("documentDetails:"+docNumber).className;
 	var currentClassOfDocumentDetailsLong = document.getElementById("documentDetailsLong:"+docNumber).className;
-	
+
 	if (currentClassOfDocumentDetails == "show"){
 		document.getElementById("documentDetails:"+docNumber).className = "hide";
-		document.getElementById("documentDetailsLong:"+docNumber).className = "show";	
+		document.getElementById("documentDetailsLong:"+docNumber).className = "show";
 	}
 	else{
 		document.getElementById("documentDetails:"+docNumber).className = "show";
@@ -78,7 +78,7 @@ function translateShortLangToLong(shortform) {
 function getAndAppendSearchResults(query, startPosition, faceted){
 	//replace spaces with %20
 	query = query.replace(/ /g,"%20");
-	
+
 	if (query != ''){
 		$('#search-title').show();
 		// Get search data
@@ -86,14 +86,14 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 			var searchResults = '';
 			// Loop through each doc
 			var documents = data.response.docs;
-			
+
 			var documentNumber = 0;
-			var maxDocumentsPerPage = 10;		
+			var maxDocumentsPerPage = 10;
 			maxDocumentsPerPage = Math.min(documents.length, 10);
 
 			var longSearchResults = '';
 			var resultsFound = true;
-			
+
 			var shortFormResult = '';
 			var longFormResult = '';
 			var arrowthing = '';
@@ -101,24 +101,25 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 			if(documents.length > 0){
 				jQuery.each( documents, function( i, val ) {
 					documentNumber++;
-					
+
 					shortFormResult = '';
 					longFormResult = '';
 
 					// Highlight Description or Normal Description
 					//--------------------------------------------
 					var documentId = val.id;
-					var detectedLanguage = val.detectedlanguage;				
+					var detectedLanguage = val.detectedlanguage;
 					var highlightedDescription = data.highlighting[documentId+'']['description_'+detectedLanguage];
-					
+
 					// If highlighted description is undefined set it to the normal description
 					if (typeof(highlightedDescription) == 'undefined'){
 						highlightedDescription = val.description;
 					}
 					//--------------------------------------------
-					
-					shortFormResult = '<div id="documentDetails:' + documentNumber + '" class="show" style="padding-bottom:10px;"><a class="link" href="' + val.identifier + '">' + (val.title+'').trunc(67) + '</a><br />'; 
-					longFormResult = '<div class="hide" id="documentDetailsLong:' + documentNumber + '" style=" padding-bottom:10px;"><a class="link" href="' + val.identifier + '">' + val.title + '</a><br />'; 					
+
+					// build short form
+					shortFormResult = '<div id="documentDetails:' + documentNumber + '" class="show" style="padding-bottom:10px;"><a class="link" href="' + val.identifier + '">' + (val.title+'').trunc(67) + '</a><br />';
+					longFormResult = '<div class="hide" id="documentDetailsLong:' + documentNumber + '" style=" padding-bottom:10px;"><a class="link" href="' + val.identifier + '">' + val.title + '</a><br />';
 					if (val.author != '' && typeof(val.author) != 'undefined'){
 						shortFormResult += '<span class="authors">' + val.author;
 						longFormResult += '<span class="authors">' + val.author;
@@ -126,24 +127,24 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 							shortFormResult += ' - ' + (val.date+'').substring(0, 4) + ' - ' + translateShortLangToLong(val.detectedlanguage) +'';
 							longFormResult += ' - ' + (val.date+'').substring(0, 10) + ' - ' + translateShortLangToLong(val.detectedlanguage) +'';
 						}
-						
-						shortFormResult += '</span><br />'; 
-						longFormResult += '</span><br />'; 
+
+						shortFormResult += '</span><br />';
+						longFormResult += '</span><br />';
 					}
-					
+
 					if (highlightedDescription != '' && typeof(highlightedDescription) != 'undefined'){
 						shortFormResult += (highlightedDescription+'').trunc(250) + '<br />';
 						longFormResult += highlightedDescription + '<br />';
 					}
 
-					
+
 					shortFormResult += '<span class="identifier">' + (val.identifier+'').trunc(100) + '</span></div>';
 					longFormResult += '<span class="identifier">' + val.identifier + '</span></div>';
-					
+
 					arrowthing = '<div style="float:right;"><a href="javascript:;" class="dropdown"><div class="arrow_document arrow_change" onClick="toggleInfo(' + documentNumber + ')"></div></a></div>';
 
-					shortFormResult = '<div style="float:left; width="95%">' + shortFormResult + '</div>'
-					longFormResult = '<div style="float:left; width="95%">' + longFormResult + '</div>'
+					shortFormResult = '<div style="float:left; width:95%">' + shortFormResult + '</div>'
+					longFormResult = '<div style="float:left; width:95%">' + longFormResult + '</div>'
 
 					searchResults += '<div class="result-block">' + arrowthing + shortFormResult + longFormResult + '<div class="clearfix"></div></div>';
 
@@ -157,33 +158,33 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 
 			// wrap in div
 			searchResults = '<div>' + searchResults + '</div>';
-			
-			
+
+
 				$('#info_and_search_content').html(searchResults);
-				
+
 					// Change arrows on documents
 				$('.dropdown').toggle(function() {
 					$(this).children().removeClass('arrow_change');
 					}, function() {
 						$(this).children().addClass('arrow_change');
 				});
-				
-			if (resultsFound){	
+
+			if (resultsFound){
 				// If the user has faceted the query, re-paginate and getAndAppendSearchResults
 				if (faceted){
-		
+
 					$('#documentStatus').html("<h5>Displaying 1-"+ Math.min(10, data.response.numFound) + " of " + data.response.numFound + " documents.</h5>");
 					var numDocuments = Math.min(Math.ceil(data.response.numFound / 10.0), 100)-1;
-					
+
 					$("#pagination").pagination('destroy');
-					
+
 					// Pagination
 					$(function() {
 						$("#pagination").pagination({
 							pages: numDocuments,
 							cssStyle: 'light-theme',
-							onPageClick: function(pageNumber, event){	
-								var pageStart = parseInt(pageNumber*10)+parseInt(1);						
+							onPageClick: function(pageNumber, event){
+								var pageStart = parseInt(pageNumber*10)+parseInt(1);
 								if (pageNumber > numDocuments){
 									$('#documentStatus').html("<h5>Displaying " + pageStart + "-" + numDocuments + " of " + data.response.numFound + " documents.</h5>");
 								}
@@ -191,32 +192,32 @@ function getAndAppendSearchResults(query, startPosition, faceted){
 									var pageTo = parseInt(pageNumber*10)+parseInt(10);
 									$('#documentStatus').html("<h5>Displaying " + pageStart + "-" + Math.min(pageTo, data.response.numFound) + " of " + data.response.numFound + " documents.</h5>");
 								}
-								getAndAppendSearchResults(query, pageNumber*10, false);		
+								getAndAppendSearchResults(query, pageNumber*10, false);
 							}
 						});
-					});	
-					
+					});
+
 				}
 			}
-			
+
 		});
 	}
 }
 
 function applyFilters() {
 	var filters = {};
-	
+
 	$.each(getSelectedFacets(), function( index, value ) {
 		var filter = value.indexOf(':');
 		var key = value.slice(0, filter);
 		var val = value.slice(filter+1);
-		
+
 		if(filters[key] == null)
 			filters[key] = [];
-			
-		filters[key].push(val);					
+
+		filters[key].push(val);
 	});
-	
+
 	var facetString = '';
 	$.each(filters, function(index, value){
 		facetString += '&fq=' + index + ':(';
@@ -227,9 +228,9 @@ function applyFilters() {
 		}
 		facetString += ')';
 	});
-	
+
 	var queryString = $('#autocomplete').val()+facetString;
-	
+
 	// Check if there is a date range filter in play
 	//-----------------------------------------------------------------
 	//Ensure that startDate is in the correct format
@@ -239,13 +240,13 @@ function applyFilters() {
 	var endDateVal = $("#endDate").val();
 
 	var dateRangeQuery = '';
-	
-	if(filter.test(startDateVal) && filter.test(endDateVal)){							
+
+	if(filter.test(startDateVal) && filter.test(endDateVal)){
 		// Use start and end Year to do a range query
 		dateRangeQuery = '&fq=date:['+startDateVal+'-01-01T00:00:00Z'+' TO '+endDateVal+'-12-31T00:00:00Z'+']';
 	}
 	//-----------------------------------------------------------------
-	
+
 	getAndAppendSearchResults(queryString+dateRangeQuery, 0, true);
 }
 
@@ -253,18 +254,18 @@ function applyFilters() {
 
 function getCurrentFilters(){
 	var filters = {};
-	
+
 	$.each(getSelectedFacets(), function( index, value ) {
 		var filter = value.indexOf(':');
 		var key = value.slice(0, filter);
 		var val = value.slice(filter+1);
-		
+
 		if(filters[key] == null)
 			filters[key] = [];
-			
-		filters[key].push(val);					
+
+		filters[key].push(val);
 	});
-	
+
 	var facetString = '';
 	$.each(filters, function(index, value){
 		facetString += '&fq=' + index + ':(';
@@ -275,31 +276,31 @@ function getCurrentFilters(){
 		}
 		facetString += ')';
 	});
-	
-	return $('#autocomplete').val()+facetString; 
+
+	return $('#autocomplete').val()+facetString;
 }
 
 
 $(document).ready(function(){
 
-	
+
 
 	$("#autocomplete").keyup(function(){
 		//Get value of the entire input field
 		var dInput = $(this).val();
-		
+
 		if(dInput == ""){
 			$("#facet_content").empty();
 			$("#pagination").pagination('destroy');
 			$('#documentStatus').html("");
 			$('#search-title').hide();
 			$('#info_and_search_content').html("<h3>Some useful tips to improve your search results:</h3><table class='table table-bordered table-striped table-condensed' style='padding-bottom:10px;' ><tr><th><h4><b>Query </b></h4></th><td><h4><b>Displays documents:</b></h4></td></tr><tr><th><b>subject:</b>”visualisation”</th><td> where the subject includes the word “visualisation'</td></tr><tr><th><b>title:</b>”computers”</th><td> where the title includes the word 'computer'</td></tr><tr><th><b>author:</b>”Hussein, Saladman”</th><td> where the author is “Hussein, Saladman”</td></tr><tr><th><b>description:</b>”water rates”</th><td> where the description includes “water rates”</td></tr><tr><th><b>publisher:</b>'McGill University'</th><td> where the publisher is “McGill University”</td></tr><tr><th><b>language:</b>”english”</th><td> where the language is “english”</td></tr><tr><th>apples <b>AND</b> bananas</th><td> that contain both 'apples' and 'bananas'</td></tr><tr><th>apples <b>NOT</b> bananas</th><td> that contain 'apples' and do not contain 'bananas'</td></tr></table><h3>Documents are returned in the following format:</h3><table class='table table-bordered table-striped table-condensed' ><td><span style='color: #324FE1;font-weight: bold;'>Title</span><br><span style='color: #1e0fbe;'> Authors - Year - Document Language</span><br>Description <br><span style='color: #009030;'>URL</span><br></div></td></table>");
-			
-		}		
-	});
-	
 
-	
+		}
+	});
+
+
+
 	$('#autocomplete').autocomplete({
 		serviceUrl: 'http://people.cs.uct.ac.za/~bmeier/solr_suggest.php',
 		onSelect: function (suggestion) {
@@ -308,11 +309,11 @@ $(document).ready(function(){
 		transformResult: function(response, originalQuery){
 			var results = response.spellcheck.suggestions;
 			var a = [];
-			
+
 			if(results.length > 0){
 				var endIndex;
 				var collation = ''
-				
+
 				if(results[results.length-2] == 'collation'){
 					endIndex = results.length-2;
 					a.push({value: results[results.length-1], data: results[results.length-1]});
@@ -320,7 +321,7 @@ $(document).ready(function(){
 				}else{
 					endIndex = results.length;
 				}
-				
+
 				for(var i=0; i < endIndex; i++){
 					if(i%2 == 1){
 						if(typeof results[i] != 'string'){
@@ -333,30 +334,30 @@ $(document).ready(function(){
 					}
 				}
 			}
-			
+
 			return {query: originalQuery, suggestions: a};
 		},
 		dataType: 'jsonp'
 	});
-	
+
 	$('#search_form').submit(function(event) {
 		event.preventDefault();
-		
+
 		//get value of the entire input field
 		var inputQuery = $('#autocomplete')[0].value;
-		
+
 		if (inputQuery != ''){
-			
+
 			getAndAppendSearchResults(inputQuery, 0, false);
 
 			$.get("http://people.cs.uct.ac.za/~bmeier/solr.php?q="+inputQuery+"&facet=true&facet.limit=5&facet.field=detectedlanguage&facet.field=subject",function(data,status){
-	
+
 				var numPages = Math.min(Math.ceil(data.response.numFound / 10.0), 100)-1;
-				
+
 				if(data.response.docs.length > 0){
-				
+
 					$('#documentStatus').html("<h5>Displaying 1-"+ Math.min(10, data.response.numFound) + " of " + data.response.numFound + " documents.</h5>");
-				
+
 					// Pagination
 					$(function() {
 						$("#pagination").pagination({
@@ -371,37 +372,37 @@ $(document).ready(function(){
 								else{
 									$('#documentStatus').html("<h5>Displaying " + pageStart + "-" + data.response.numFound + " of " + data.response.numFound + " documents.</h5>");
 								}
-								getAndAppendSearchResults(inputQuery, pageNumber*10, false);		
+								getAndAppendSearchResults(inputQuery, pageNumber*10, false);
 							}
 						});
-					});	
-				
-				
+					});
+
+
 					// Get Language, publisher, date Facet categories
 					var languageFacets = '';
 					var subjectFacets = '';
-					
+
 					var languageLength = Math.min(data.facet_counts.facet_fields.detectedlanguage.length, 10);
 					for (var t=0; t< languageLength; t+=2){
 						if (data.facet_counts.facet_fields.detectedlanguage[t+1] > 0) {
 							languageFacets += "<li class='list-group-item'><label class='plain'><input type='checkbox' onClick='applyFilters()' value='detectedlanguage:"+data.facet_counts.facet_fields.detectedlanguage[t]+"'> "+translateShortLangToLong(data.facet_counts.facet_fields.detectedlanguage[t])+ '</label><span class="badge">'+data.facet_counts.facet_fields.detectedlanguage[t+1]+'</span></li>';
 						}
-					}	
-					
+					}
+
 					var subjectLength = Math.min(data.facet_counts.facet_fields.subject.length, 10);
 					for (var t=0; t< subjectLength; t+=2){
 						if (data.facet_counts.facet_fields.subject[t+1] > 0) {
 							subjectFacets += "<li class='list-group-item'><label class='plain'><input type='checkbox' onClick='applyFilters()' value='subject:"+data.facet_counts.facet_fields.subject[t]+"'> "+data.facet_counts.facet_fields.subject[t]+ '</label><span class="badge">'+data.facet_counts.facet_fields.subject[t+1]+'</span></li>';
 						}
 					}
-					
+
 					// FACET SIDEBAR
 					$('#facet_content').html(
-					
+
 					"<div class='page-header'><h3>Refine search</h3></div>"+
 					"<ul class='list-group'>"+
 						"<li class='list-group-item' style='background-color: #dd4814; border-color: #dd4814; color: #fff;'>Language</li>" +
-						languageFacets +   
+						languageFacets +
 					"</ul>"+
 					"<ul class='list-group'>"+
 						"<li class='list-group-item' style='background-color: #dd4814; border-color: #dd4814; color: #fff;'>Date</li>" +
@@ -409,7 +410,7 @@ $(document).ready(function(){
 					"</ul>"+
 					"<ul class='list-group'>"+
 						"<li class='list-group-item' style='background-color: #dd4814; border-color: #dd4814; color: #fff;'>Subject</li>" +
-						subjectFacets +  
+						subjectFacets +
 					"</ul>");
 
 					$('.clickMe').toggle(function() {
@@ -419,8 +420,8 @@ $(document).ready(function(){
 							$(this).parent().find("div:eq(0)").slideUp("fast");
 							$(this).children().addClass('arrow_change');
 					});
-					
-					$("#dateRangeSubmit").click(function(){  
+
+					$("#dateRangeSubmit").click(function(){
 
 						//Ensure that startDate is in the correct format
 						var filter = new RegExp("([1-2][0-9][0-9][0-9])");
@@ -428,7 +429,7 @@ $(document).ready(function(){
 						var startDateVal = $("#startDate").val();
 						var endDateVal = $("#endDate").val();
 
-						if(filter.test(startDateVal) && filter.test(endDateVal)){							
+						if(filter.test(startDateVal) && filter.test(endDateVal)){
 							$("#rangeStatus").html('');
 							// Use start and end Year to do a range query
 							var dateRangeQuery = '&fq=date:['+startDateVal+'-01-01T00:00:00Z'+' TO '+endDateVal+'-07-01T00:00:00Z'+']';
@@ -436,15 +437,15 @@ $(document).ready(function(){
 						}
 						else{
 							$("#rangeStatus").html('Invalid Date Range!');
-							
+
 						}
 
 					});
 				}
-			
+
 			});
 		}
-		
+
 		return false;
 	});
 });
