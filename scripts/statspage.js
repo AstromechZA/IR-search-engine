@@ -59,13 +59,18 @@ $(function(){
 
     $.get("http://people.cs.uct.ac.za/~bmeier/solr_update_state.php", function(data, status) {
 	
+		data.data.reverse();	
+	
 		var data2 = [];
-		$.each(data.data, function(index, point){
-			data2.push([Date.parse(point.ts), point.delta]);			
-		});
+		var last = 0;		
+				
+		for(var i=0;i<data.data.length;i+=1) {
+			var point = data.data[i];
+			last = last + point.delta;
+			data2.push([Date.parse(point.ts.replace(' ','T')), last]);
+						
+		}
 		
-		data2.reverse();
-
 		var count_chart = new Highcharts.StockChart({
 		  chart: {
 			renderTo: 'update_graph',
@@ -112,7 +117,7 @@ $(function(){
 		  },
 	  
 		  series: [{
-				type: 'column',
+				type: 'line',
 				name: 'New documents',
 				data: data2
 			}]
