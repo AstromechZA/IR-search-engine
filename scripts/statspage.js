@@ -100,7 +100,7 @@ $(function(){
 		  },
 	  
 		  title: {
-			text: 'New documents submitted per day'
+			text: 'Document count over time'
 		  },
 	  
 		  tooltip: {
@@ -118,7 +118,7 @@ $(function(){
 	  
 		  series: [{
 				type: 'line',
-				name: 'New documents',
+				name: 'Documents',
 				data: data2
 			}]
 		});
